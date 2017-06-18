@@ -8,38 +8,52 @@ import java.awt.event.KeyListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class Command extends JFrame implements KeyListener{
-	JPanel mainview;
-	JLabel lblNewLabel;
+public class Command extends JFrame {
+	private static final int IFW = JComponent.WHEN_IN_FOCUSED_WINDOW;
+	private static final String MODE_INSERT = "insert";
+	private static final String MODE_COMMAND = "command";
+	private static final String MODE_VISUAL= "visual";
+	private static final String MODE_VISUAL_LINE="visual line";
+	
+	private JPanel mainView;
+	private JLabel lblNewLabel;
 	private JPanel intructionPanel;
 	private JPanel workingPanel;
-	private JLabel lblNewLabel_1;
+	private JLabel commandLabel;
 	private String workingAreaTxt;
-	private char mode;
-	private String enter = "enter";
-	private JTextArea textArea;
+	private String mode;
+	private JEditorPane textArea;
+	private JPanel commandPanel;
+	private JTextField commandTextField;
 	public Command() {
-		mode = 'c';
+		mode = MODE_COMMAND;
 		workingAreaTxt= new String();
-		mainview= new JPanel();
-		setContentPane(mainview);
+		mainView= new JPanel();
+		setContentPane(mainView);
 		setVisible(true);
-		mainview.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainview.setLayout(new BorderLayout(0, 0));
+		mainView.setLayout(new BorderLayout(0, 0));
 		JPanel panel = new JPanel();
-		mainview.add(panel, BorderLayout.CENTER);
+		mainView.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		workingPanel = new JPanel();
 		panel.add(workingPanel, BorderLayout.CENTER);
 		workingPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblNewLabel_1 = new JLabel(":");
-		workingPanel.add(lblNewLabel_1, BorderLayout.SOUTH);
-		
-		textArea = new JTextArea();
+		textArea = new JEditorPane();
 		workingPanel.add(textArea, BorderLayout.CENTER);
+		
+		commandPanel = new JPanel();
+		workingPanel.add(commandPanel, BorderLayout.SOUTH);
+		commandPanel.setLayout(new BorderLayout(0, 0));
+		
+		commandLabel = new JLabel(mode);
+		commandPanel.add(commandLabel, BorderLayout.WEST);
+		
+		commandTextField = new JTextField();
+		commandPanel.add(commandTextField, BorderLayout.CENTER);
+		commandTextField.setColumns(10);
 		intructionPanel =new JPanel();
 		panel.add(intructionPanel, BorderLayout.NORTH);
 		
@@ -50,55 +64,56 @@ public class Command extends JFrame implements KeyListener{
         
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-		
+	// Key mapping
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("I"),MODE_INSERT);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("ESCAPE"),MODE_COMMAND);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("V"),MODE_VISUAL);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_V,KeyEvent.SHIFT_DOWN_MASK),MODE_VISUAL_LINE);
 	
+	mainView.getActionMap().put(MODE_INSERT, new ChangeModeAction(MODE_INSERT));	
+	mainView.getActionMap().put(MODE_COMMAND, new ChangeModeAction(MODE_COMMAND));	
+	mainView.getActionMap().put(MODE_VISUAL, new ChangeModeAction(MODE_VISUAL));	
+	mainView.getActionMap().put(MODE_VISUAL_LINE, new ChangeModeAction(MODE_VISUAL_LINE));	
 	}
+
 	
-	
+	public void setMode(String mode)
+	{
+		this.mode = mode;
+		commandLabel.setText(mode);
+		switch(this.mode)
+		{
+			case MODE_INSERT: 
+				textArea.setEditable(true);
+				textArea.requestFocusInWindow();
+				mainView.getActionMap().get(MODE_COMMAND).setEnabled(false);
+				mainView.getActionMap().get(MODE_VISUAL_LINE).setEnabled(false);
+				mainView.getActionMap().get(MODE_VISUAL).setEnabled(false);
+				break;
+			case MODE_COMMAND:
+				textArea.setEditable(false); 
+				commandTextField.requestFocusInWindow();
+				break;
+			case MODE_VISUAL: break;
+			case MODE_VISUAL_LINE: break;
+		}
+	}
 	  
 
 	
-    public void keyPressed(KeyEvent e) {
-    	if(mode =='c')
-    	{
-    		switch(e.getKeyChar())
-    		{
-    		case 'i':
-    			textArea.setEditable(true);
-    			mode ='i';
-    			System.out.println("mode:"+mode);
-    		break;
-    		}
-    		
-    	}
-    	if(mode=='i')
-    	{
-    		switch(e.getKeyCode())
-    		{
-    		case KeyEvent.VK_ESCAPE:
-    			requestFocus();
-    			textArea.setEditable(false);
-    			mode ='c';
-    			System.out.println("mode:"+mode);
-    			break;
-    		}
-    	}
-        System.out.println(e.getKeyChar());
-        workingAreaTxt+=e.getKeyChar();
-        //lblTxt.setText(workingAreaTxt);
-    }
-    
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+
+	private class ChangeModeAction extends AbstractAction
+	{ 
+		private String modeToChange;
+		ChangeModeAction(String mode)
+		{
+			modeToChange = mode;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setMode(modeToChange);
+		}
 	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public static void main(String args[])
 	{
 		Command c = new  Command();
