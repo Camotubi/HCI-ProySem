@@ -127,11 +127,14 @@ public class Grafical extends JFrame {
 		btnTabR = new JButton("");
 		btnTabR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					txtArea.getDocument().insertString(txtArea.getCaretPosition(), "\t",null);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(txtArea.getSelectedText()!=null)
+				{
+					try {
+						txtArea.getDocument().insertString(txtArea.getCaretPosition(), "\t",null);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

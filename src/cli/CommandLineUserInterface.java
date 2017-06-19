@@ -28,10 +28,11 @@ public class CommandLineUserInterface extends JFrame  {
 	public static final String cutTrigger ="x";
 	public static final String copyTrigger ="y";
 	public static final String pasteTrigger ="p";
+	public static final String commentTrigger ="m";
+	public static final String tabTrigger ="p";
 	public static final char undoTrigger ='u';
 	public static final char redoTrigger ='r';
-	DefaultHighlighter.DefaultHighlightPainter highlightPainter = 
-	        new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+	DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
 	
 	
 	
@@ -43,7 +44,6 @@ public class CommandLineUserInterface extends JFrame  {
 	private static final String MODE_VISUAL_LINE="Visual Line";
 	
 	private String clipboard;
-	private ActionListener keyboardListener;
 	private ActionListener modeChangeListener;
 	private boolean requestingModeChange;
 	private String modeToChange;
@@ -52,14 +52,12 @@ public class CommandLineUserInterface extends JFrame  {
 	private JPanel intructionPanel;
 	private JPanel workingPanel;
 	private JLabel commandLabel;
-	private String workingAreaTxt;
 	private String mode;
 	private JTextArea textArea;
 	private JPanel commandPanel;
 	private JTextField commandTextField;
 	private DocumentListener docListener;
 	private CaretListener caretListener;
-	private boolean initiatedSelecting;
 	private int selectionBegin;
 	private int selectionEnd;
 	private int lineSelectionBegin;
@@ -67,7 +65,6 @@ public class CommandLineUserInterface extends JFrame  {
 	
 	public CommandLineUserInterface()  {
 		mode = MODE_MAIN;
-		workingAreaTxt= new String();
 		mainView= new JPanel();
 		setContentPane(mainView);
 		setVisible(true);
@@ -82,6 +79,7 @@ public class CommandLineUserInterface extends JFrame  {
 		workingPanel.setLayout(new BorderLayout(0, 0));
 		
 		setTextArea(new JTextArea());
+		textArea.setFocusable(false);
 		workingPanel.add(getTextArea(), BorderLayout.CENTER);
 		
 		commandPanel = new JPanel();
@@ -116,7 +114,9 @@ public class CommandLineUserInterface extends JFrame  {
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("X"),cutTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("P"),pasteTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("Y"),copyTrigger);
-	/*mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("L"),MODE_VISUAL_LINE);*/
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("M"),commentTrigger);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("TAB"),commentTrigger);
+	
 	
 	
 	mainView.getActionMap().put(MODE_MAIN, new requestChangeModeAction(MODE_MAIN));	
@@ -216,6 +216,7 @@ public class CommandLineUserInterface extends JFrame  {
 			break;
 		case MODE_INSERT:
 			getTextArea().getHighlighter().removeAllHighlights();
+			textArea.setFocusable(true);
 			textArea.setEditable(true);
 			textArea.requestFocus();
 			textArea.getCaret().setVisible(true);
