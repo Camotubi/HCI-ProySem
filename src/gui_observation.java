@@ -1,3 +1,4 @@
+import cli.Observation;
 
 public class gui_observation extends Observation{
 
