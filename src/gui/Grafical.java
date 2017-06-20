@@ -19,9 +19,7 @@ public class Grafical extends JFrame {
 	JPanel mainView;
 	JTextArea txtArea;
 	JButton btnNext;
-	private JPanel intructionPanel;
 	private JPanel workingPanel;
-	private JLabel lblNewLabel;
 	private JButton btnSave;
 	private JButton btnPaste;
 	private JPanel panel_buttons;
@@ -32,6 +30,7 @@ public class Grafical extends JFrame {
 	private JButton btnComment;
 	private JButton btnNewButton_7;
 	private String clipboard="";
+	private JScrollPane scrollPane;
 	public Grafical() throws IOException
 	{
 		mainView= new JPanel();
@@ -49,8 +48,11 @@ public class Grafical extends JFrame {
 		panel.add(workingPanel, BorderLayout.CENTER);
 		workingPanel.setLayout(new BorderLayout(0, 0));
 		txtArea = new JTextArea();
+		scrollPane = new JScrollPane(txtArea );
+		workingPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		workingPanel.add(txtArea, BorderLayout.CENTER);
+		
+		
 		
 		panel_buttons = new JPanel();
 		workingPanel.add(panel_buttons, BorderLayout.NORTH);
@@ -190,12 +192,6 @@ public class Grafical extends JFrame {
 		
 		btnNewButton_7 = new JButton("");
 		panel_buttons.add(btnNewButton_7);
-		intructionPanel = new JPanel();
-		panel.add(intructionPanel, BorderLayout.NORTH);
-		intructionPanel.setLayout(new BorderLayout(0, 0));
-		
-		lblNewLabel = new JLabel("New label");
-		intructionPanel.add(lblNewLabel);
 		btnNext = new JButton("Siguiente");
 		panel.add(btnNext, BorderLayout.SOUTH);
 		

@@ -48,8 +48,6 @@ public class CommandLineUserInterface extends JFrame  {
 	private boolean requestingModeChange;
 	private String modeToChange;
 	private JPanel mainView;
-	private JLabel lblNewLabel;
-	private JPanel intructionPanel;
 	private JPanel workingPanel;
 	private JLabel commandLabel;
 	private String mode;
@@ -62,8 +60,10 @@ public class CommandLineUserInterface extends JFrame  {
 	private int selectionEnd;
 	private int lineSelectionBegin;
 	private int lineSelectionEnd;
-	
+	private JScrollPane scrollPane;
+	private Stack<gui_observation> obs;
 	public CommandLineUserInterface()  {
+	
 		mode = MODE_MAIN;
 		mainView= new JPanel();
 		setContentPane(mainView);
@@ -78,10 +78,6 @@ public class CommandLineUserInterface extends JFrame  {
 		panel.add(workingPanel, BorderLayout.CENTER);
 		workingPanel.setLayout(new BorderLayout(0, 0));
 		
-		setTextArea(new JTextArea());
-		textArea.setFocusable(false);
-		workingPanel.add(getTextArea(), BorderLayout.CENTER);
-		
 		commandPanel = new JPanel();
 		workingPanel.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BorderLayout(0, 0));
@@ -92,18 +88,36 @@ public class CommandLineUserInterface extends JFrame  {
 		commandTextField = new JTextField();
 		commandPanel.add(commandTextField, BorderLayout.CENTER);
 		commandTextField.setColumns(10);
-		intructionPanel =new JPanel();
-		panel.add(intructionPanel, BorderLayout.NORTH);
 		
-		intructionPanel.setLayout(new BorderLayout(0, 0));
 		
-		lblNewLabel = new JLabel("Instruccion");
-		intructionPanel.add(lblNewLabel);
+		setTextArea(new JTextArea());
+		textArea.setFocusable(false);
+		//workingPanel.add(getTextArea(), BorderLayout.CENTER);
 		textArea.getDocument().addDocumentListener(docListener);
 		textArea.addCaretListener(new caretListener());
+		
+		scrollPane = new JScrollPane(textArea);
+		workingPanel.add(scrollPane, BorderLayout.CENTER);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         //updateGUI();
+        
+        Action checkCommand = new AbstractAction()
+    	{
+        	
+    	    @Override
+    	    public void actionPerformed(ActionEvent e)
+    	    {
+    	        if(commandTextField.getText()=="start")
+    	        {
+    	        	
+    	        }
+    	        if(commandTextField.getText()=="end")
+    	        {
+    	        	end
+    	        }
+    	    }
+    	};
 	// Key mapping
     mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("ESCAPE"),MODE_MAIN);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("I"),MODE_INSERT);
@@ -214,6 +228,11 @@ public class CommandLineUserInterface extends JFrame  {
 			getTextArea().getHighlighter().removeAllHighlights();
 			textArea.setEditable(false);
 			break;
+		case MODE_COMMAND:
+			
+			commandTextField.requestFocus();
+			textArea.setEditable(false);
+			break;
 		case MODE_INSERT:
 			getTextArea().getHighlighter().removeAllHighlights();
 			textArea.setFocusable(true);
@@ -245,6 +264,9 @@ public class CommandLineUserInterface extends JFrame  {
 			break;
 		}
 	}
+	
+	
+
 	
 	public JTextArea getTextArea() {
 		return textArea;
