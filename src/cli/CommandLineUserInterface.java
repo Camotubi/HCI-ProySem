@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Stack;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +18,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
+
+import gui.gui_observation;
 
 public class CommandLineUserInterface extends JFrame  {
 	public static final char saveTrigger ='w';
@@ -61,9 +64,13 @@ public class CommandLineUserInterface extends JFrame  {
 	private int lineSelectionBegin;
 	private int lineSelectionEnd;
 	private JScrollPane scrollPane;
-	private Stack<gui_observation> obs;
+	private Stack<Cli_observation> obs;
+	private long initialT;
+	private long finalT;
 	public CommandLineUserInterface()  {
 	
+		obs=new Stack<Cli_observation>();
+		obs.push(new Cli_observation(1,JOptionPane.showInputDialog("Ingresa tu nombre porfa",null)));
 		mode = MODE_MAIN;
 		mainView= new JPanel();
 		setContentPane(mainView);
@@ -108,16 +115,28 @@ public class CommandLineUserInterface extends JFrame  {
     	    @Override
     	    public void actionPerformed(ActionEvent e)
     	    {
-    	        if(commandTextField.getText()=="start")
+    	    	System.out.println(commandTextField.getText().length());
+    	        if(commandTextField.getText().trim().equals("start"))
     	        {
-    	        	
+    	        	initialT=System.currentTimeMillis();
+    	        	obs.push(new Cli_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
     	        }
-    	        if(commandTextField.getText()=="end")
+    	        if(commandTextField.getText().trim().equals("end"))
     	        {
-    	        	end
+    	        	finalT=System.currentTimeMillis()-initialT;
+    	        	textArea.setText("");
+    	        	obs.peek().setCompletionTime(finalT);
+    	        	System.out.println(finalT);
     	        }
+    	        if(commandTextField.getText().trim().equals("exit"))
+    	        {
+    	        	System.out.println("exit  copiado");
+    	        }
+    	    commandTextField.setText("");
+    	    new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
     	    }
     	};
+    	commandTextField.addActionListener(checkCommand);
 	// Key mapping
     mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("ESCAPE"),MODE_MAIN);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("I"),MODE_INSERT);
@@ -129,7 +148,7 @@ public class CommandLineUserInterface extends JFrame  {
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("P"),pasteTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("Y"),copyTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("M"),commentTrigger);
-	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("TAB"),commentTrigger);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("TAB"),tabTrigger);
 	
 	
 	
@@ -158,6 +177,7 @@ public class CommandLineUserInterface extends JFrame  {
 		private String modeToChange;
 		requestChangeModeAction(String mode)
 		{
+			System.out.println("estoyaqui");
 			modeToChange = mode;
 			
 		}
@@ -198,6 +218,7 @@ public class CommandLineUserInterface extends JFrame  {
 	public void setMode(String mode)
 	{
 		this.mode = mode;
+		
 		if(mode.equals(MODE_VISUAL_LINE))
 		{
 			
@@ -221,15 +242,20 @@ public class CommandLineUserInterface extends JFrame  {
 	public void updateGUI()
 	{
 		commandLabel.setText(mode);
+		System.out.println(this.mode);
 		switch(mode)
 		{
 		case MODE_MAIN:
 			
 			getTextArea().getHighlighter().removeAllHighlights();
+			//textArea.requestFocus();
 			textArea.setEditable(false);
+			commandTextField.setEditable(false);
+			commandTextField.setEnabled(false);
 			break;
 		case MODE_COMMAND:
-			
+			commandTextField.setEnabled(true);
+			commandTextField.setEditable(true);
 			commandTextField.requestFocus();
 			textArea.setEditable(false);
 			break;

@@ -5,26 +5,33 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+
+import cli.CliController;
+import cli.Cli_observation;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
 public class Grafical extends JFrame {
 	JPanel mainView;
 	JTextArea txtArea;
 	JButton btnNext;
-<<<<<<< HEAD
-=======
+	private Stack<gui_observation> obs;
 
-	private gui_observation obs;
-	private JPanel intructionPanel;
->>>>>>> b415eb24c3f482b49fa689f901254fe18e242678
+
 	private JPanel workingPanel;
 	private JButton btnSave;
 	private JButton btnPaste;
@@ -39,9 +46,12 @@ public class Grafical extends JFrame {
 	private JScrollPane scrollPane;
 	public Grafical() throws IOException
 	{
+		obs=new Stack<gui_observation>();
+		obs.push(new gui_observation(1,JOptionPane.showInputDialog("Ingresa tu nombre porfa",null)));
 		mainView= new JPanel();
 		setContentPane(mainView);
 		setVisible(true);
+
 		//mainView.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainView.setLayout(new BorderLayout(0, 0));
@@ -57,9 +67,9 @@ public class Grafical extends JFrame {
 		scrollPane = new JScrollPane(txtArea );
 		workingPanel.add(scrollPane, BorderLayout.CENTER);
 		
+
 		
-		
-		
+		txtArea.getDocument().addDocumentListener(new MyDocumentListener());
 		panel_buttons = new JPanel();
 		workingPanel.add(panel_buttons, BorderLayout.NORTH);
 		Image imgSave = ImageIO.read(getClass().getResource("save.png")).getScaledInstance( 15,15,  java.awt.Image.SCALE_SMOOTH) ;
@@ -73,6 +83,7 @@ public class Grafical extends JFrame {
 		btnSave = new JButton("");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				obs.peek().incrementClicks();
 			}
 		});
 		panel_buttons.add(btnSave);
@@ -82,6 +93,8 @@ public class Grafical extends JFrame {
 		btnPaste = new JButton("");
 		btnPaste.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				obs.peek().incrementClicks();
+				obs.peek().incrementTimesPaste();
 				try {
 					txtArea.getDocument().insertString(txtArea.getCaretPosition(), clipboard,null);
 				} catch (BadLocationException e1) {
@@ -97,6 +110,8 @@ public class Grafical extends JFrame {
 		btnCopy = new JButton("");
 		btnCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				obs.peek().incrementClicks();
+				obs.peek().incrementTimesCopy();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -115,7 +130,8 @@ public class Grafical extends JFrame {
 		btnCut = new JButton("");
 		btnCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				obs.peek().incrementClicks();
+				obs.peek().incrementTimesCut();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -135,6 +151,8 @@ public class Grafical extends JFrame {
 		btnTabR = new JButton("");
 		btnTabR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				obs.peek().incrementClicks();
+				obs.peek().incrementNtabs();
 				if(txtArea.getSelectedText()==null)
 				{
 					try {
@@ -146,7 +164,7 @@ public class Grafical extends JFrame {
 				}
 				else
 				{
-					txtArea.getDocument().insertString(txtArea.get);
+					//txtArea.getDocument().insertString(txtArea.get);
 				}
 			}
 		});
@@ -156,6 +174,7 @@ public class Grafical extends JFrame {
 		btnTabL = new JButton("");
 		btnTabL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				obs.peek().incrementClicks();
 				try {
 					System.out.println(txtArea.getDocument().getText(txtArea.getCaretPosition()-1,1));
 					if(txtArea.getDocument().getText(txtArea.getCaretPosition()-1,1)=="\t")
@@ -176,6 +195,8 @@ public class Grafical extends JFrame {
 		btnComment = new JButton("");
 		btnComment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				obs.peek().incrementClicks();
+				obs.peek().incrementNcomments();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -203,15 +224,78 @@ public class Grafical extends JFrame {
 		btnNewButton_7 = new JButton("");
 		panel_buttons.add(btnNewButton_7);
 		btnNext = new JButton("Siguiente");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+			}
+		});
 		panel.add(btnNext, BorderLayout.SOUTH);
 		
 		//pack();
 		setMinimumSize(new Dimension(400, 400));
 		
+		
 	}
+	
+	class MyDocumentListener implements DocumentListener {
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			//System.out.println("we");
+			
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			obs.peek().setNkeystrokes(obs.peek().getNkeystrokes()+1);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			obs.peek().setNkeystrokes(obs.peek().getNkeystrokes()+1);
+			
+		}
+	 
+	 
+	
+	}
+	
+	
+	
+
+	
+	
 	public static void main(String args[]) throws IOException
 	{
-		Grafical gra = new Grafical();
+		
+		 SwingUtilities.invokeLater(new Runnable() {
+			 
+		 	 
+				
+		 	   @Override
+		
+		 	   public void run() {
+		 
+		 		  try {
+					Grafical gra = new Grafical();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-	}
+		
+		 	   }
+		
+		 	  });
+	
+		 	 
+	
+
 }
+		
+	
+
+	
+}
+

@@ -25,7 +25,7 @@ public class CliController
 	}
 
 
-	public CliController(String work)
+	public CliController()
 	{
 		this.modelText = new WorkingText();
 		this.view = new CommandLineUserInterface();

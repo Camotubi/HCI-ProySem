@@ -3,18 +3,33 @@ import cli.Observation;
 
 public class gui_observation extends Observation{
 
-	private int nlclick;	// number of left clicks
-	private int nrclick;	// numbe of right clicks
-	private double timeMouseMove;	// time in seconds(s) of mouse movement
-	private int ncut;
-	private int ncopy;
-	private int npaste;
-	private int ntab;
-	private int ncomments;
+	private int nclick;	// number of left clicks
+
+
 
 	
 	//Methods Implementation
-	public gui_observation(int id) {
-		super(id);
+	public gui_observation(int id, String name) {
+		super(id,name);
+
+	}
+
+
+
+	public void incrementClicks() {
+		setNclick(getNclick() + 1);
+		
+	}
+
+
+
+	public int getNclick() {
+		return nclick;
+	}
+
+
+
+	public void setNclick(int nclick) {
+		this.nclick = nclick;
 	}
 }

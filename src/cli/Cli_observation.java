@@ -7,8 +7,8 @@ public class Cli_observation extends Observation {
 	private int timesVisualMode;
 	private int timesVisualLineMode;
 	private int timesMainMode;
-	public Cli_observation(int id) {
-		super(id);
+	public Cli_observation(int id,String name) {
+		super(id,name);
 
 	}
 
