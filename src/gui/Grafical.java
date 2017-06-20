@@ -19,6 +19,12 @@ public class Grafical extends JFrame {
 	JPanel mainView;
 	JTextArea txtArea;
 	JButton btnNext;
+<<<<<<< HEAD
+=======
+
+	private gui_observation obs;
+	private JPanel intructionPanel;
+>>>>>>> b415eb24c3f482b49fa689f901254fe18e242678
 	private JPanel workingPanel;
 	private JButton btnSave;
 	private JButton btnPaste;
@@ -129,15 +135,15 @@ public class Grafical extends JFrame {
 		btnTabR = new JButton("");
 		btnTabR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(txtArea.getSelectedText()!=null)
-				{
+				//if(txtArea.getSelectedText()!=null)
+				//{
 					try {
 						txtArea.getDocument().insertString(txtArea.getCaretPosition(), "\t",null);
 					} catch (BadLocationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				}
+				//}
 			}
 		});
 		panel_buttons.add(btnTabR);
