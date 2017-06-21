@@ -44,7 +44,6 @@ public class Grafical extends JFrame {
 	private JButton btnTabR;
 	private JButton btnTabL;
 	private JButton btnComment;
-	private JButton btnNewButton_7;
 	private String clipboard="";
 	private JScrollPane scrollPane;
 	private String state="Empezar";
@@ -98,7 +97,7 @@ public class Grafical extends JFrame {
 
 					@Override
 					public void caretUpdate(CaretEvent arg0) {
-						obs.peek().incrementNkeystrokes();
+						//obs.peek().incrementNkeystrokes();
 						
 					}
 			
@@ -285,40 +284,46 @@ public class Grafical extends JFrame {
 					initialT=System.currentTimeMillis();
 					state="Terminar";
 					btnNext.setText(state);
-				}
-				if(state.equals("Termine"))
+				}else
 				{
-					obs.peek().setCompletionTime(System.currentTimeMillis()-initialT);
-					state="Siguiente";
-					btnNext.setText(state);
-				}
-				if(state.equals("Siguiente"))
-				{
-					state="Empezar";
-					btnNext.setText(state);
-					
-					//Taro Arreglo Aqui
-					String ans=null;
-					boolean out = false;
-					String[] valores ={"1","2","3","4","5"};
-					while(out!=true){
-					try{
-						ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
-						obs.peek().setUserSatisfaction(Integer.parseInt(ans));
-						ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
-						obs.peek().setPersivedDificulty(Integer.parseInt(ans));
-						obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
-						out=true;
-						txtArea.setText("");
+					if(state.equals("Terminar"))
+					{
+						obs.peek().setCompletionTime(System.currentTimeMillis()-initialT);
+						state="Siguiente";
+						btnNext.setText(state);
 					}
-					catch (Exception io){
-						JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+					else
+					{
+						if(state.equals("Siguiente"))
+						{
+							state="Empezar";
+							btnNext.setText(state);
+							
+							//Taro Arreglo Aqui
+							String ans=null;
+							boolean out = false;
+							String[] valores ={"1","2","3","4","5"};
+							while(out!=true){
+							try{
+								ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+								obs.peek().setUserSatisfaction(Integer.parseInt(ans));
+								ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+								obs.peek().setPersivedDificulty(Integer.parseInt(ans));
+								obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+								out=true;
+								txtArea.setText("");
+							}
+							catch (Exception io){
+								JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+							}
+							finally
+							{};
+							}//termina el while
+							//Hasta aqui
+						}
 					}
-					finally
-					{};
-					}//termina el while
-					//Hasta aqui
 				}
+				
 				
 			}
 		});
@@ -332,7 +337,8 @@ public class Grafical extends JFrame {
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		    	while(obs.size()>0)
 		    	{
-		    		obs.pop().save(obs.peek().getNamePersona());
+		    		obs.peek().save(obs.peek().getNamePersona());
+		    		obs.pop();
 		    	}
 		    	
 		            System.exit(0);
@@ -352,12 +358,12 @@ public class Grafical extends JFrame {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			// TODO Auto-generated method stub
-			obs.peek().setNkeystrokes(obs.peek().getNkeystrokes()+1);
+			obs.peek().incrementNkeystrokes();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			obs.peek().setNkeystrokes(obs.peek().getNkeystrokes()+1);
+			obs.peek().incrementNkeystrokes();
 			
 		}
 	 

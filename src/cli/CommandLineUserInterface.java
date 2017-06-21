@@ -35,7 +35,7 @@ public class CommandLineUserInterface extends JFrame  {
 	public static final String copyTrigger ="y";
 	public static final String pasteTrigger ="p";
 	public static final String commentTrigger ="m";
-	public static final String tabTrigger ="p";
+	public static final String tabTrigger ="t";
 	public static final String newLineTrigger ="n";
 	public static final char undoTrigger ='u';
 	public static final char redoTrigger ='r';
@@ -123,7 +123,6 @@ public class CommandLineUserInterface extends JFrame  {
     	        if(commandTextField.getText().trim().equals("start"))
     	        {
     	        	initialT=System.currentTimeMillis();
-    	        	obs.push(new Cli_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
     	        }
     	        if(commandTextField.getText().trim().equals("end"))
     	        {
@@ -561,6 +560,7 @@ public class CommandLineUserInterface extends JFrame  {
 			if(mode.equals(MODE_MAIN))
 			{
 				try {
+					System.out.println("dafaq"+clipboard);
 					getTextArea().getDocument().insertString(getTextArea().getCaretPosition(), clipboard, null);
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
@@ -581,7 +581,7 @@ public class CommandLineUserInterface extends JFrame  {
 		public void actionPerformed(ActionEvent e) {
 
 			obs.peek().incrementNkeystrokes();
-			obs.peek().incrementNPaste();
+			obs.peek().incrementNCopy();
 			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
 				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
@@ -591,7 +591,7 @@ public class CommandLineUserInterface extends JFrame  {
 					int end= higlights[0].getEndOffset();
 					
 					try {
-						clipboard=getTextArea().getDocument().getText(begining, end-begining-1);
+						clipboard=getTextArea().getDocument().getText(begining, end-begining);
 						new requestChangeModeAction(MODE_MAIN).actionPerformed(e);;
 					} catch (BadLocationException e1) {
 						// TODO Auto-generated catch block
