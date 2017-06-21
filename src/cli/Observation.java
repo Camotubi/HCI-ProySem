@@ -8,9 +8,9 @@ public class Observation {
 	private int nkeystrokes;	//number of total keystrokes
 	private int userSatisfaction;	//
 	private int persivedDificulty;
-	private int timesCopy;
-	private int timesPaste;
-	private int timesCut;
+	private int nCopy;
+	private int nPaste;
+	private int nCut;
 	private int ncomments;
 	private int ntabs;
 	// 
@@ -19,7 +19,22 @@ public class Observation {
 	
 
 	//Methods implementation
+	public void print(){
+	System.out.println(
+			namePersona+"\n"+
+			completionTime+"\n"+
+			nkeystrokes+"\n"+
+			userSatisfaction+"\n"+
+			persivedDificulty+"\n"+
+			nCopy+"\n"+
+			nCut+"\n"+
+			nPaste+"\n"+
+			ncomments+"\n"+
+			ntabs+"\n"
+			
+			);
 	
+	}
 	public Observation(int id,String name)
 	{
 		this.setId(id);
@@ -77,33 +92,33 @@ public class Observation {
 	}
 
 
-	public int getTimesCopy() {
-		return timesCopy;
+	public int getNCopy() {
+		return nCopy;
 	}
 
 
-	public void setTimesCopy(int timesCopy) {
-		this.timesCopy = timesCopy;
+	public void setNCopy(int nCopy) {
+		this.nCopy = nCopy;
 	}
 
 
-	public int getTimesPaste() {
-		return timesPaste;
+	public int getNPaste() {
+		return nPaste;
 	}
 
 
-	public void setTimesPaste(int timesPaste) {
-		this.timesPaste = timesPaste;
+	public void setNPaste(int nPaste) {
+		this.nPaste = nPaste;
 	}
 
 
 	public int getTimesCut() {
-		return timesCut;
+		return nCut;
 	}
 
 
-	public void setTimesCut(int timesCut) {
-		this.timesCut = timesCut;
+	public void setTimesCut(int nCut) {
+		this.nCut = nCut;
 	}
 
 
@@ -128,21 +143,21 @@ public class Observation {
 
 	
 	
-	public void incrementnkeystrokes()
+	public void incrementNkeystrokes()
 	{
 		nkeystrokes++;
 	}
-	public void incrementTimesCopy()
+	public void incremetNCopy()
 	{
-		timesCopy++;
+		nCopy++;
 	}
-	public void incrementTimesPaste()
+	public void incrementNPaste()
 	{
-		timesPaste++;
+		nPaste++;
 	}
-	public void incrementTimesCut()
+	public void incrementNCut()
 	{
-		timesCut++;
+		nCut++;
 	}
 	public void incrementNcomments()
 	{

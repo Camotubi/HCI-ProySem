@@ -115,7 +115,7 @@ public class CommandLineUserInterface extends JFrame  {
     	    @Override
     	    public void actionPerformed(ActionEvent e)
     	    {
-    	    	System.out.println(commandTextField.getText().length());
+    	    	
     	        if(commandTextField.getText().trim().equals("start"))
     	        {
     	        	initialT=System.currentTimeMillis();
@@ -177,7 +177,6 @@ public class CommandLineUserInterface extends JFrame  {
 		private String modeToChange;
 		requestChangeModeAction(String mode)
 		{
-			System.out.println("estoyaqui");
 			modeToChange = mode;
 			
 		}
@@ -222,7 +221,7 @@ public class CommandLineUserInterface extends JFrame  {
 		if(mode.equals(MODE_VISUAL_LINE))
 		{
 			
-			
+			obs.peek().incrementNVisualLineMode();
 			try {
 				lineSelectionBegin = textArea.getLineOfOffset(textArea.getCaretPosition());
 				lineSelectionEnd = lineSelectionBegin ;
@@ -234,15 +233,26 @@ public class CommandLineUserInterface extends JFrame  {
 		}
 		if(mode.equals(MODE_VISUAL))
 		{
+			obs.peek().incrementNVisualMode();
 			selectionBegin = textArea.getCaretPosition();
 			selectionEnd = selectionBegin;
+		}
+		if(mode.equals(MODE_MAIN))
+		{
+			obs.peek().incrementNMainMode();
+
+		}
+		if(mode.equals(MODE_INSERT))
+		{
+			obs.peek().incrementNInsertMode();
+
 		}
 		updateGUI();
 	}
 	public void updateGUI()
 	{
 		commandLabel.setText(mode);
-		System.out.println(this.mode);
+		
 		switch(mode)
 		{
 		case MODE_MAIN:
@@ -324,7 +334,7 @@ public class CommandLineUserInterface extends JFrame  {
 			{
 				int begining= higlights[0].getStartOffset();
 				int end= higlights[0].getEndOffset();
-				System.out.println(begining+"  "+end);
+			
 				try {
 					clipboard=getTextArea().getDocument().getText(begining, end-begining);
 					getTextArea().getDocument().remove(begining, end-begining);
@@ -334,6 +344,8 @@ public class CommandLineUserInterface extends JFrame  {
 					e1.printStackTrace();
 				}
 			}
+			obs.peek().incrementNCut();
+
 			
 		}
 	
@@ -376,7 +388,7 @@ public class CommandLineUserInterface extends JFrame  {
 				{
 					int begining= higlights[0].getStartOffset();
 					int end= higlights[0].getEndOffset();
-					System.out.println(begining+"  "+end);
+					
 					try {
 						clipboard=getTextArea().getDocument().getText(begining, end-begining-1);
 						new requestChangeModeAction(MODE_MAIN).actionPerformed(e);;
@@ -419,7 +431,7 @@ public class CommandLineUserInterface extends JFrame  {
 
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			System.out.println("CaretPositon:"+textArea.getCaretPosition());
+	
 			
 			if(mode.equals(MODE_VISUAL))
 			{

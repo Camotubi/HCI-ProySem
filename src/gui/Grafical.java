@@ -94,11 +94,11 @@ public class Grafical extends JFrame {
 		btnPaste.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-				obs.peek().incrementTimesPaste();
+				//obs.peek().incrementTimesPaste();
 				try {
 					txtArea.getDocument().insertString(txtArea.getCaretPosition(), clipboard,null);
 				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}
@@ -111,7 +111,7 @@ public class Grafical extends JFrame {
 		btnCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-				obs.peek().incrementTimesCopy();
+				//obs.peek().incrementNCopy();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -131,7 +131,7 @@ public class Grafical extends JFrame {
 		btnCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-				obs.peek().incrementTimesCut();
+			//	obs.peek().incrementTimesCut();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
