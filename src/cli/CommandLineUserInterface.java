@@ -34,6 +34,7 @@ public class CommandLineUserInterface extends JFrame  {
 	public static final String pasteTrigger ="p";
 	public static final String commentTrigger ="m";
 	public static final String tabTrigger ="p";
+	public static final String newLineTrigger ="n";
 	public static final char undoTrigger ='u';
 	public static final char redoTrigger ='r';
 	DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
@@ -149,7 +150,9 @@ public class CommandLineUserInterface extends JFrame  {
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("P"),pasteTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("Y"),copyTrigger);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("M"),commentTrigger);
-	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("TAB"),tabTrigger);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("T"),tabTrigger);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("N"),newLineTrigger);
+	
 	
 	
 	
@@ -162,7 +165,10 @@ public class CommandLineUserInterface extends JFrame  {
 	mainView.getActionMap().put(cutTrigger, new cut());	
 	mainView.getActionMap().put(pasteTrigger, new paste());	
 	mainView.getActionMap().put(copyTrigger, new copy());	
-
+	mainView.getActionMap().put(commentTrigger, new comment());	
+	mainView.getActionMap().put(tabTrigger, new tab());	
+	mainView.getActionMap().put(newLineTrigger, new newLine());	
+	
 	updateGUI();
 	setMinimumSize(new Dimension(400, 400));
 	}
@@ -259,7 +265,7 @@ public class CommandLineUserInterface extends JFrame  {
 		case MODE_MAIN:
 			
 			getTextArea().getHighlighter().removeAllHighlights();
-			//textArea.requestFocus();
+			textArea.requestFocus();
 			textArea.setEditable(false);
 			commandTextField.setEditable(false);
 			commandTextField.setEnabled(false);
@@ -325,6 +331,117 @@ public class CommandLineUserInterface extends JFrame  {
 		textArea.addCaretListener(this.caretListener);
 	}
 	
+
+	public class comment extends AbstractAction
+	{
+		
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
+			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
+			{
+				if(higlights.length>0)
+				{
+					try {
+						textArea.getDocument().insertString(higlights[0].getStartOffset(), "/*", null);
+						textArea.getDocument().insertString(higlights[0].getEndOffset(), "*/", null);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					try {
+						textArea.getDocument().insertString(textArea.getCaretPosition(), "//", null);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
+				obs.peek().incrementNcomments();
+			}
+		}
+	
+		
+	}
+	
+
+	public class newLine extends AbstractAction
+	{
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(mode.equals(MODE_MAIN))
+			{
+			
+				try {
+					textArea.getDocument().insertString(textArea.getCaretPosition(), "\n", null);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				obs.peek().incrementNNewLine();
+			}
+			
+
+			
+		}
+	
+		
+	}
+	
+	
+	public class tab extends AbstractAction
+	{
+		
+		
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			obs.peek().incrementNtabs();
+			Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
+			if(higlights.length<=0)
+			{
+				try {
+					textArea.getDocument().insertString(textArea.getCaretPosition(), "\t",null);
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else
+			{
+				 try {
+					int start =textArea.getLineOfOffset(higlights[0].getStartOffset());
+					
+					int end =textArea.getLineOfOffset(higlights[0].getEndOffset());
+					textArea.getDocument().insertString(higlights[0].getStartOffset(), "\t",null);
+					if(start<end)
+					{
+					
+						for(int i=start+1;i<=end;i++)
+						{
+							textArea.getDocument().insertString(textArea.getLineStartOffset(i), "\t",null);
+						}
+					}
+					
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+			
+		}
+	
+		
+	}
+	
+	
+	
 	public class cut extends AbstractAction
 	{
 		
@@ -339,7 +456,7 @@ public class CommandLineUserInterface extends JFrame  {
 				try {
 					clipboard=getTextArea().getDocument().getText(begining, end-begining);
 					getTextArea().getDocument().remove(begining, end-begining);
-					new requestChangeModeAction(MODE_MAIN).actionPerformed(e);;
+					new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

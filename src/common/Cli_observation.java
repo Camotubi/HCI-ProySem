@@ -8,6 +8,7 @@ public class Cli_observation extends Observation {
 	private int nVisualMode;
 	private int nVisualLineMode;
 	private int nMainMode;
+	private int nNewLine;
 	public Cli_observation(int id,String name) {
 		super(id,name);
 
@@ -23,6 +24,11 @@ public class Cli_observation extends Observation {
 				);
 	}
 	
+	public void incrementNNewLine()
+	{
+		print();
+		nNewLine++;
+	}
 	public void incrementNInsertMode()
 	{
 		print();
@@ -43,6 +49,12 @@ public class Cli_observation extends Observation {
 	{
 		print();
 		nVisualMode++;
+	}
+	public int getnNewLine() {
+		return nNewLine;
+	}
+	public void setnNewLine(int nNewLine) {
+		this.nNewLine = nNewLine;
 	}
 
 }

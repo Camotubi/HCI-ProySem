@@ -187,11 +187,18 @@ public class Grafical extends JFrame {
 				{
 					 try {
 						int start =txtArea.getLineOfOffset(txtArea.getSelectionStart());
+						
 						int end =txtArea.getLineOfOffset(txtArea.getSelectionEnd());
-						//for(int i=txtArea.getLineStartOffset(start);i<=txtArea.getLineStartOffset(end));i++)
-						//{
-							//get
-						//}
+						txtArea.getDocument().insertString(txtArea.getSelectionStart(), "\t",null);
+						if(start<end)
+						{
+						
+							for(int i=start+1;i<=end;i++)
+							{
+								txtArea.getDocument().insertString(txtArea.getLineStartOffset(i), "\t",null);
+							}
+						}
+						
 					} catch (BadLocationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
