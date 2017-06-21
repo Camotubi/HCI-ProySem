@@ -1,5 +1,11 @@
 package common;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Observation {
 	private int id;
 	/*members related to our study*/
@@ -181,6 +187,39 @@ public class Observation {
 
 	public void setNtabs(int ntabs) {
 		this.ntabs = ntabs;
+	}
+	
+	public void save (String filename){
+		//Para la fecha
+		java.util.Date fecha = new Date();
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = new GregorianCalendar();
+		Calendar c = null;
+		String dia = Integer.toString(c.get(Calendar.DATE));
+		String mes = Integer.toString(c.get(Calendar.MONTH));
+		String annio = Integer.toString(c.get(Calendar.YEAR));
+		//String con los datos
+		String datos =(	"Datos de Observacion\n\n"+
+						"ID: "+id+"\n"+
+						"Nombre: "+namePersona+"\n"+
+						"Tiempo Realizado: "+completionTime+"\n"+
+						"# de Teclas Presionadas: "+nkeystrokes+"\n"+
+						"Sactifacion del Usuario: "+userSatisfaction+"\n"+
+						"Dificultad Percibida: "+persivedDificulty+"\n"+
+						"# de Copiar: "+nCopy+"\n"+
+						"# de Cortar: "+nCut+"\n"+
+						"# de Pegar: "+nPaste+"\n"+
+						"# de Comentarios: "+ncomments+"\n"+
+						"# de Tabs: "+ntabs+"\n"
+						);
+		try{
+		 PrintWriter writer = new PrintWriter(filename+"/"+dia+"-"+mes+"-"+annio+".txt", "UTF-8");
+		 writer.println(datos);
+		 writer.close();
+		}
+		catch(IOException e){
+			//nose que poner aqui
+		}
 	}
 	
 
