@@ -10,6 +10,8 @@ import java.util.Stack;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -88,7 +90,19 @@ public class Grafical extends JFrame {
 		scrollPane = new JScrollPane(txtArea );
 		workingPanel.add(scrollPane, BorderLayout.CENTER);
 		
+		txtArea.addCaretListener(new CaretListener()
+				{
 
+					@Override
+					public void caretUpdate(CaretEvent arg0) {
+						obs.peek().incrementNkeystrokes();
+						
+					}
+			
+				}
+				);
+		
+		
 		
 		txtArea.getDocument().addDocumentListener(new MyDocumentListener());
 		panel_buttons = new JPanel();
@@ -108,6 +122,7 @@ public class Grafical extends JFrame {
 			}
 		});
 		panel_buttons.add(btnSave);
+		btnSave.setVisible(false);
 		 
 		btnSave.setIcon(new ImageIcon(imgSave));
 		
@@ -226,7 +241,7 @@ public class Grafical extends JFrame {
 				}
 			}
 		});
-		
+		btnTabL.setVisible(false);
 		panel_buttons.add(btnTabL);
 		btnTabL.setIcon(new ImageIcon(imgTabL));
 		
@@ -258,23 +273,23 @@ public class Grafical extends JFrame {
 		});
 		panel_buttons.add(btnComment);
 		btnComment.setIcon(new ImageIcon(imgComment));
-		
-		btnNewButton_7 = new JButton("");
-		panel_buttons.add(btnNewButton_7);
+	
 		btnNext = new JButton("Siguiente");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Taro Arreglo Aqui
 				String ans=null;
 				boolean out = false;
+				String[] valores ={"1","2","3","4","5"};
 				while(out!=true){
 				try{
-					ans=JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.QUESTION_MESSAGE);
+					ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
 					obs.peek().setUserSatisfaction(Integer.parseInt(ans));
-					ans=JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.QUESTION_MESSAGE);
+					ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
 					obs.peek().setPersivedDificulty(Integer.parseInt(ans));
 					obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
 					out=true;
+					txtArea.setText("");
 				}
 				catch (Exception io){
 					JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);

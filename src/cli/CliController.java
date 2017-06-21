@@ -34,34 +34,12 @@ public class CliController
 		this.obsModel= new ArrayList<Observation>();
 		this.cliModel = new CliModel();
 		view.setModeChangeListener(new RequestChangeModeListener());
-		view.setDocListener(new docListener());
+
 	}
 	
 	
 	
-	
-	class docListener implements DocumentListener
-	{
-		
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			cliModel.updateWorkingText(view.getTextArea().getText());
 
-		}
-
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			// TODO Auto-generated method stub
-	
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-		
-	}
 	class RequestChangeModeListener implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e)

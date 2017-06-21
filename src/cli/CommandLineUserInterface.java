@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -171,6 +172,30 @@ public class CommandLineUserInterface extends JFrame  {
 	
 	updateGUI();
 	setMinimumSize(new Dimension(400, 400));
+	
+	setDocListener(new DocumentListener()
+			
+			{
+
+				@Override
+				public void changedUpdate(DocumentEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent arg0) {
+					obs.peek().incrementNkeystrokes();
+					
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent arg0) {
+					obs.peek().incrementNkeystrokes();
+					
+				}
+		
+			});
 	}
 
 	
@@ -229,6 +254,7 @@ public class CommandLineUserInterface extends JFrame  {
 		{
 			
 			obs.peek().incrementNVisualLineMode();
+			obs.peek().incrementNkeystrokes();
 			try {
 				lineSelectionBegin = textArea.getLineOfOffset(textArea.getCaretPosition());
 				lineSelectionEnd = lineSelectionBegin ;
@@ -241,17 +267,20 @@ public class CommandLineUserInterface extends JFrame  {
 		if(mode.equals(MODE_VISUAL))
 		{
 			obs.peek().incrementNVisualMode();
+			obs.peek().incrementNkeystrokes();
 			selectionBegin = textArea.getCaretPosition();
 			selectionEnd = selectionBegin;
 		}
 		if(mode.equals(MODE_MAIN))
 		{
 			obs.peek().incrementNMainMode();
+			obs.peek().incrementNkeystrokes();
 
 		}
 		if(mode.equals(MODE_INSERT))
 		{
 			obs.peek().incrementNInsertMode();
+			obs.peek().incrementNkeystrokes();
 
 		}
 		updateGUI();
@@ -362,6 +391,7 @@ public class CommandLineUserInterface extends JFrame  {
 				}
 				new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
 				obs.peek().incrementNcomments();
+				obs.peek().incrementNkeystrokes();
 			}
 		}
 	
@@ -384,6 +414,7 @@ public class CommandLineUserInterface extends JFrame  {
 					e1.printStackTrace();
 				}
 				obs.peek().incrementNNewLine();
+				obs.peek().incrementNkeystrokes();
 			}
 			
 
@@ -401,40 +432,43 @@ public class CommandLineUserInterface extends JFrame  {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			obs.peek().incrementNtabs();
-			Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
-			if(higlights.length<=0)
+			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
-				try {
-					textArea.getDocument().insertString(textArea.getCaretPosition(), "\t",null);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			else
-			{
-				 try {
-					int start =textArea.getLineOfOffset(higlights[0].getStartOffset());
-					
-					int end =textArea.getLineOfOffset(higlights[0].getEndOffset());
-					textArea.getDocument().insertString(higlights[0].getStartOffset(), "\t",null);
-					if(start<end)
-					{
-					
-						for(int i=start+1;i<=end;i++)
-						{
-							textArea.getDocument().insertString(textArea.getLineStartOffset(i), "\t",null);
-						}
+				obs.peek().incrementNtabs();
+				obs.peek().incrementNkeystrokes();
+				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
+				if(higlights.length<=0)
+				{
+					try {
+						textArea.getDocument().insertString(textArea.getCaretPosition(), "\t",null);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-					
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
-			}
+				else
+				{
+					 try {
+						int start =textArea.getLineOfOffset(higlights[0].getStartOffset());
+						
+						int end =textArea.getLineOfOffset(higlights[0].getEndOffset());
+						textArea.getDocument().insertString(higlights[0].getStartOffset(), "\t",null);
+						if(start<end)
+						{
+						
+							for(int i=start+1;i<=end;i++)
+							{
+								textArea.getDocument().insertString(textArea.getLineStartOffset(i), "\t",null);
+							}
+						}
+						
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 
-			
+			}
 		}
 	
 		
@@ -444,30 +478,30 @@ public class CommandLineUserInterface extends JFrame  {
 	
 	public class cut extends AbstractAction
 	{
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
-			if(higlights.length>0)
+			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
-				int begining= higlights[0].getStartOffset();
-				int end= higlights[0].getEndOffset();
 			
-				try {
-					clipboard=getTextArea().getDocument().getText(begining, end-begining);
-					getTextArea().getDocument().remove(begining, end-begining);
-					new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
+				if(higlights.length>0)
+				{
+					int begining= higlights[0].getStartOffset();
+					int end= higlights[0].getEndOffset();
+				
+					try {
+						clipboard=getTextArea().getDocument().getText(begining, end-begining);
+						getTextArea().getDocument().remove(begining, end-begining);
+						new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
+				obs.peek().incrementNCut();
+				obs.peek().incrementNkeystrokes();
 			}
-			obs.peek().incrementNCut();
-
-			
-		}
-	
-		
+		}	
 	}
 	
 	
@@ -476,7 +510,8 @@ public class CommandLineUserInterface extends JFrame  {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			obs.peek().incrementNkeystrokes();
+			obs.peek().incrementNPaste();
 			if(mode.equals(MODE_MAIN))
 			{
 				try {
@@ -499,7 +534,9 @@ public class CommandLineUserInterface extends JFrame  {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			if(mode.equals(MODE_MAIN))
+			obs.peek().incrementNkeystrokes();
+			obs.peek().incrementNPaste();
+			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
 				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
 				if(higlights.length>0)
@@ -522,14 +559,7 @@ public class CommandLineUserInterface extends JFrame  {
 	}
 	
 	
-	public void yank()
-	{
-		
-	}
-	public void paste()
-	{
-		
-	}
+
 	
 	public String getClipboard() {
 		return clipboard;
@@ -550,7 +580,7 @@ public class CommandLineUserInterface extends JFrame  {
 		@Override
 		public void caretUpdate(CaretEvent e) {
 	
-			
+			obs.peek().incrementNkeystrokes();
 			if(mode.equals(MODE_VISUAL))
 			{
 				updateGUI();

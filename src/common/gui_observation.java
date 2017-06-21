@@ -39,10 +39,5 @@ public class gui_observation extends Observation{
 		print();
 	}
 	
-	@Override
-	public void print()
-	{
-		super.print();
-		System.out.println("nclick:" +nclick);
-	}
+
 }

@@ -166,6 +166,7 @@ public class Observation {
 	public void incrementNtabs()
 	{
 		ntabs++;
+		print();
 	}
 	public int getNtabs() {
 		return ntabs;

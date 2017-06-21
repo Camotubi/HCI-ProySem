@@ -26,19 +26,21 @@ public class Cli_observation extends Observation {
 	
 	public void incrementNNewLine()
 	{
-		print();
+		
 		nNewLine++;
+		print();
 	}
 	public void incrementNInsertMode()
 	{
-		print();
+		
 		nInsertMode++;
+		print();
 	}
 	public void incrementNMainMode()
 	
 	{
-		print();
-		nMainMode++;
+		
+		nMainMode++;print();
 	}
 	public void incrementNVisualLineMode()
 	{
@@ -47,11 +49,13 @@ public class Cli_observation extends Observation {
 	}
 	public void incrementNVisualMode()
 	{
-		print();
+		
 		nVisualMode++;
+		print();
 	}
 	public int getnNewLine() {
 		return nNewLine;
+		
 	}
 	public void setnNewLine(int nNewLine) {
 		this.nNewLine = nNewLine;
