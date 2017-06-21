@@ -46,6 +46,7 @@ public class CliController
 		{
 			if(cliModel.changeMode(view.getModeToChange()))
 			{
+				
 				view.setMode(cliModel.getMode());
 				
 			}

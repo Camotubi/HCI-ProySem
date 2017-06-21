@@ -249,6 +249,7 @@ public class CommandLineUserInterface extends JFrame  {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			setModeToChange(modeToChange);
 			modeChangeListener.actionPerformed(e);
 			
@@ -308,6 +309,7 @@ public class CommandLineUserInterface extends JFrame  {
 		}
 		if(mode.equals(MODE_MAIN))
 		{
+			
 			obs.peek().incrementNMainMode();
 			obs.peek().incrementNkeystrokes();
 
@@ -328,12 +330,16 @@ public class CommandLineUserInterface extends JFrame  {
 		{
 		case MODE_MAIN:
 			commandPanel.setBackground(defColor);
+			
 			getTextArea().getHighlighter().removeAllHighlights();
 			textArea.requestFocus();
 			commandTextField.setVisible(false);
 			textArea.setEditable(false);
 			commandTextField.setEditable(false);
 			commandTextField.setEnabled(false);
+			textArea.getCaret().setVisible(true);
+			textArea.setEditable(false);
+			System.out.println("l"+textArea.getText());
 			break;
 		case MODE_COMMAND:
 			commandPanel.setBackground(Color.cyan);
@@ -453,7 +459,7 @@ public class CommandLineUserInterface extends JFrame  {
 			{
 			
 				try {
-					textArea.getDocument().insertString(textArea.getCaretPosition(), "\n", null);
+					textArea.getDocument().insertString(textArea.getLineEndOffset(textArea.getLineOfOffset(textArea.getCaretPosition())), "\n", null);
 				} catch (BadLocationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
