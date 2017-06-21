@@ -24,6 +24,7 @@ import common.Cli_observation;
 import common.gui_observation;
 
 public class CommandLineUserInterface extends JFrame  {
+	public static final Color defColor = new JPanel().getBackground();
 	public static final char saveTrigger ='w';
 	public static final char insertModeTrigger ='i';
 	public static final char visualModeTrigger ='v';
@@ -127,14 +128,49 @@ public class CommandLineUserInterface extends JFrame  {
     	        if(commandTextField.getText().trim().equals("end"))
     	        {
     	        	finalT=System.currentTimeMillis()-initialT;
-    	        	textArea.setText("");
+    	        	
     	        	obs.peek().setCompletionTime(finalT);
     	        	System.out.println(finalT);
     	        }
-    	        if(commandTextField.getText().trim().equals("exit"))
+    	        if(commandTextField.getText().trim().equals("next"))
     	        {
+    	        	String ans=null;
+					boolean out = false;
+					String[] valores ={"1","2","3","4","5"};
+					while(out!=true){
+					try{
+						ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+						obs.peek().setUserSatisfaction(Integer.parseInt(ans));
+						ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+						obs.peek().setPersivedDificulty(Integer.parseInt(ans));
+						obs.push(new Cli_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+						out=true;
+						textArea.setText("");
+					}
+					catch (Exception io){
+						JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+					}
+					finally
+					{};
+					}//termina el while
+					//Hasta aqui
+				
     	        	System.out.println("exit  copiado");
     	        }
+    	        if(commandTextField.getText().trim().equals("exit"))
+    	        {
+    	        	while(obs.size()>0)
+    		    	{
+    	        		System.out.print("obsSize"+obs.size());
+    		    		obs.peek().save(obs.peek().getNamePersona());
+    		    		obs.pop();
+    		    	}
+    		    	
+    		            System.exit(0);
+    		        
+    	        }
+    	        
+    	        
     	    commandTextField.setText("");
     	    new requestChangeModeAction(MODE_MAIN).actionPerformed(e);
     	    }
@@ -172,7 +208,7 @@ public class CommandLineUserInterface extends JFrame  {
 	
 	updateGUI();
 	setMinimumSize(new Dimension(400, 400));
-	
+	this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 	setDocListener(new DocumentListener()
 			
 			{
@@ -292,20 +328,26 @@ public class CommandLineUserInterface extends JFrame  {
 		switch(mode)
 		{
 		case MODE_MAIN:
-			
+			commandPanel.setBackground(defColor);
 			getTextArea().getHighlighter().removeAllHighlights();
 			textArea.requestFocus();
+			commandTextField.setVisible(false);
 			textArea.setEditable(false);
 			commandTextField.setEditable(false);
 			commandTextField.setEnabled(false);
 			break;
 		case MODE_COMMAND:
+			commandPanel.setBackground(Color.cyan);
+			commandTextField.setBackground(Color.cyan);
+			commandTextField.setVisible(true);
 			commandTextField.setEnabled(true);
 			commandTextField.setEditable(true);
 			commandTextField.requestFocus();
 			textArea.setEditable(false);
 			break;
 		case MODE_INSERT:
+			commandTextField.setVisible(false);
+			commandPanel.setBackground(Color.yellow);
 			getTextArea().getHighlighter().removeAllHighlights();
 			textArea.setFocusable(true);
 			textArea.setEditable(true);
@@ -313,6 +355,8 @@ public class CommandLineUserInterface extends JFrame  {
 			textArea.getCaret().setVisible(true);
 			break;
 		case MODE_VISUAL:
+			commandTextField.setVisible(false);
+			commandPanel.setBackground(Color.red);
 			try {
 				getTextArea().getHighlighter().addHighlight(selectionBegin,selectionEnd,highlightPainter) ;
 			} catch (BadLocationException e) {
@@ -324,6 +368,8 @@ public class CommandLineUserInterface extends JFrame  {
 			
 			break;
 		case MODE_VISUAL_LINE:
+			commandTextField.setVisible(false);
+			commandPanel.setBackground(Color.green);
 			try {
 				getTextArea().getHighlighter().addHighlight(textArea.getLineStartOffset(lineSelectionBegin),textArea.getLineEndOffset(lineSelectionEnd),highlightPainter) ;
 			} catch (BadLocationException e) {

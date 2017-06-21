@@ -1,5 +1,8 @@
 package common;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
@@ -195,23 +198,27 @@ public class Observation {
 	}
 	public void save (String filename){
 		//Para la fecha
-		java.util.Date fecha = new Date();
-		Calendar c1 = Calendar.getInstance();
-		Calendar c2 = new GregorianCalendar();
-		Calendar c = null;
-		String dia = Integer.toString(c.get(Calendar.DATE));
-		String mes = Integer.toString(c.get(Calendar.MONTH));
-		String annio = Integer.toString(c.get(Calendar.YEAR));
-		//String con los datos
 	
+
+		//String con los datos
 		try{
-		 PrintWriter writer = new PrintWriter(filename+"/"+dia+"-"+mes+"-"+annio+".txt", "UTF-8");
-		 writer.println(generateReport());
-		 writer.close();
+		File f = new File(filename+id+System.currentTimeMillis()+".txt");
+
+		FileWriter fw = new FileWriter(f);
+
+		BufferedWriter bw = new BufferedWriter(fw);
+
+		bw.write(generateReport());        // Writing to the file
+
+		bw.close();                       // Close the BufferedWriter
+
+		fw.close();                       // Close the FileWriter
 		}
-		catch(IOException e){
-			//nose que poner aqui
+		catch(Exception e)
+		{
+			
 		}
+		
 	}
 	
 

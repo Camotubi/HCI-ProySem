@@ -15,7 +15,8 @@ public class Runner {
 			 	   public void run() {
 			 
 			 		  CliController c= new CliController();
-			
+			 		 System.out.println("Working Directory = " +
+			 	              System.getProperty("user.dir"));
 			 	   }
 			
 			 	  });

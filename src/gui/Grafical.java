@@ -47,6 +47,9 @@ public class Grafical extends JFrame {
 	private JButton btnNewButton_7;
 	private String clipboard="";
 	private JScrollPane scrollPane;
+	private String state="Empezar";
+	private long initialT;
+	private long finalT;
 	public Grafical() throws IOException
 	{
 		obs=new Stack<gui_observation>();
@@ -274,37 +277,67 @@ public class Grafical extends JFrame {
 		panel_buttons.add(btnComment);
 		btnComment.setIcon(new ImageIcon(imgComment));
 	
-		btnNext = new JButton("Siguiente");
+		btnNext = new JButton(state);
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Taro Arreglo Aqui
-				String ans=null;
-				boolean out = false;
-				String[] valores ={"1","2","3","4","5"};
-				while(out!=true){
-				try{
-					ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
-					obs.peek().setUserSatisfaction(Integer.parseInt(ans));
-					ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
-					obs.peek().setPersivedDificulty(Integer.parseInt(ans));
-					obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
-					out=true;
-					txtArea.setText("");
+				if(state.equals("Empezar"))
+				{
+					initialT=System.currentTimeMillis();
+					state="Terminar";
+					btnNext.setText(state);
 				}
-				catch (Exception io){
-					JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+				if(state.equals("Termine"))
+				{
+					obs.peek().setCompletionTime(System.currentTimeMillis()-initialT);
+					state="Siguiente";
+					btnNext.setText(state);
 				}
-				finally
-				{};
-				}//termina el while
-				//Hasta aqui
+				if(state.equals("Siguiente"))
+				{
+					state="Empezar";
+					btnNext.setText(state);
+					
+					//Taro Arreglo Aqui
+					String ans=null;
+					boolean out = false;
+					String[] valores ={"1","2","3","4","5"};
+					while(out!=true){
+					try{
+						ans=(String) JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+						obs.peek().setUserSatisfaction(Integer.parseInt(ans));
+						ans=(String) JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.DEFAULT_OPTION,null,valores,"0");
+						obs.peek().setPersivedDificulty(Integer.parseInt(ans));
+						obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+						out=true;
+						txtArea.setText("");
+					}
+					catch (Exception io){
+						JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+					}
+					finally
+					{};
+					}//termina el while
+					//Hasta aqui
+				}
+				
 			}
 		});
 		panel.add(btnNext, BorderLayout.SOUTH);
 		
 		//pack();
 		setMinimumSize(new Dimension(400, 400));
-		
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    	while(obs.size()>0)
+		    	{
+		    		obs.pop().save(obs.peek().getNamePersona());
+		    	}
+		    	
+		            System.exit(0);
+		        }
+		    });
 		
 	}
 	
