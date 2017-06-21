@@ -14,15 +14,15 @@ public class Cli_observation extends Observation {
 
 	}
 	@Override
-	public void print(){
-		super.print();
-		System.out.println(
-				"nInsertMode:"+nInsertMode+"\n"+
-						"nVisualMode:"+nVisualMode+"\n"+
-						"nVisualLineMode:"+nVisualLineMode+"\n"+
-						"nMainMode:"+nMainMode
-				);
+	public String generateReport()
+	{
+		return new String(super.generateReport()+"\nnInsertMode:"+nInsertMode+"\n"+
+				"nVisualMode:"+nVisualMode+"\n"+
+				"nVisualLineMode:"+nVisualLineMode+"\n"+
+				"nMainMode:"+nMainMode+"\n"+
+				"nNewLine:"+nNewLine);
 	}
+
 	
 	public void incrementNNewLine()
 	{

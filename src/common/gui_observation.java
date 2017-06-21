@@ -13,7 +13,11 @@ public class gui_observation extends Observation{
 
 	}
 
-
+	@Override
+	public String generateReport()
+	{
+		return (super.generateReport()+"\nnClick:"+nclick);
+	}
 
 	public void incrementClicks() {
 		setNclick(getNclick() + 1);

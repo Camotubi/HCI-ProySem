@@ -26,20 +26,7 @@ public class Observation {
 
 	//Methods implementation
 	public void print(){
-	System.out.println(
-			"ID:"+id+"\n"+
-			"namePersona:"+namePersona+"\n"+
-			"completionTime:"+completionTime+"\n"+
-			"nkeystrokes:"+nkeystrokes+"\n"+
-			"userSatisfaction:"+userSatisfaction+"\n"+
-			"persivedDificulty:"+persivedDificulty+"\n"+
-			"nCopy:"+nCopy+"\n"+
-			"nCut:"+nCut+"\n"+
-			"nPaste:"+nPaste+"\n"+
-			"ncomments:"+ncomments+"\n"+
-			"ntabs:"+ntabs+"\n"
-			
-			);
+	System.out.println(generateReport());
 	
 	}
 	public Observation(int id,String name)
@@ -188,7 +175,23 @@ public class Observation {
 	public void setNtabs(int ntabs) {
 		this.ntabs = ntabs;
 	}
-	
+	public String generateReport()
+	{
+		String datos =(	"Datos de Observacion\n\n"+
+				"ID: "+id+"\n"+
+				"Nombre: "+namePersona+"\n"+
+				"Tiempo Realizado: "+completionTime+"\n"+
+				"# de Teclas Presionadas: "+nkeystrokes+"\n"+
+				"Sactifacion del Usuario: "+userSatisfaction+"\n"+
+				"Dificultad Percibida: "+persivedDificulty+"\n"+
+				"# de Copiar: "+nCopy+"\n"+
+				"# de Cortar: "+nCut+"\n"+
+				"# de Pegar: "+nPaste+"\n"+
+				"# de Comentarios: "+ncomments+"\n"+
+				"# de Tabs: "+ntabs
+				);
+		return datos;
+	}
 	public void save (String filename){
 		//Para la fecha
 		java.util.Date fecha = new Date();
@@ -199,22 +202,10 @@ public class Observation {
 		String mes = Integer.toString(c.get(Calendar.MONTH));
 		String annio = Integer.toString(c.get(Calendar.YEAR));
 		//String con los datos
-		String datos =(	"Datos de Observacion\n\n"+
-						"ID: "+id+"\n"+
-						"Nombre: "+namePersona+"\n"+
-						"Tiempo Realizado: "+completionTime+"\n"+
-						"# de Teclas Presionadas: "+nkeystrokes+"\n"+
-						"Sactifacion del Usuario: "+userSatisfaction+"\n"+
-						"Dificultad Percibida: "+persivedDificulty+"\n"+
-						"# de Copiar: "+nCopy+"\n"+
-						"# de Cortar: "+nCut+"\n"+
-						"# de Pegar: "+nPaste+"\n"+
-						"# de Comentarios: "+ncomments+"\n"+
-						"# de Tabs: "+ntabs+"\n"
-						);
+	
 		try{
 		 PrintWriter writer = new PrintWriter(filename+"/"+dia+"-"+mes+"-"+annio+".txt", "UTF-8");
-		 writer.println(datos);
+		 writer.println(generateReport());
 		 writer.close();
 		}
 		catch(IOException e){
