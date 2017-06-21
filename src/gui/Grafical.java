@@ -257,7 +257,25 @@ public class Grafical extends JFrame {
 		btnNext = new JButton("Siguiente");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+				//Taro Arreglo Aqui
+				String ans=null;
+				boolean out = false;
+				while(out!=true){
+				try{
+					ans=JOptionPane.showInputDialog(null,"Sastifaccion al hacer la tarea (1-5)","Stfact",JOptionPane.QUESTION_MESSAGE);
+					obs.peek().setUserSatisfaction(Integer.parseInt(ans));
+					ans=JOptionPane.showInputDialog(null,"Dificultad Percibida (1-5)","dffcult",JOptionPane.QUESTION_MESSAGE);
+					obs.peek().setPersivedDificulty(Integer.parseInt(ans));
+					obs.push(new gui_observation(((int)obs.peek().getId()+1),obs.peek().getNamePersona()));
+					out=true;
+				}
+				catch (Exception io){
+					JOptionPane.showMessageDialog(null, "Introduzca una opcion valida","ERROR",JOptionPane.WARNING_MESSAGE);
+				}
+				finally
+				{};
+				}//termina el while
+				//Hasta aqui
 			}
 		});
 		panel.add(btnNext, BorderLayout.SOUTH);
