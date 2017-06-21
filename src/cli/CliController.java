@@ -7,6 +7,8 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import common.Observation;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class CliController

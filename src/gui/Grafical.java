@@ -15,7 +15,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import cli.CliController;
-import cli.Cli_observation;
+import common.Cli_observation;
+import common.gui_observation;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -63,7 +64,27 @@ public class Grafical extends JFrame {
 		workingPanel = new JPanel();
 		panel.add(workingPanel, BorderLayout.CENTER);
 		workingPanel.setLayout(new BorderLayout(0, 0));
-		txtArea = new JTextArea();
+		txtArea = new JTextArea(){ 
+			
+			@Override
+			public
+			void copy()
+			{
+				
+			}
+			@Override
+			public
+			void cut()
+			{
+				
+			}
+			@Override
+			public
+			void paste()
+			{
+				
+			}
+		};
 		scrollPane = new JScrollPane(txtArea );
 		workingPanel.add(scrollPane, BorderLayout.CENTER);
 		
@@ -94,7 +115,7 @@ public class Grafical extends JFrame {
 		btnPaste.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-				//obs.peek().incrementTimesPaste();
+				obs.peek().incrementNPaste();
 				try {
 					txtArea.getDocument().insertString(txtArea.getCaretPosition(), clipboard,null);
 				} catch (BadLocationException e1) {
@@ -111,7 +132,7 @@ public class Grafical extends JFrame {
 		btnCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-				//obs.peek().incrementNCopy();
+				obs.peek().incrementNCopy();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -131,7 +152,7 @@ public class Grafical extends JFrame {
 		btnCut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obs.peek().incrementClicks();
-			//	obs.peek().incrementTimesCut();
+				obs.peek().incrementNCut();
 				if(txtArea.getSelectedText()!=null)
 				{
 					try {
@@ -164,7 +185,17 @@ public class Grafical extends JFrame {
 				}
 				else
 				{
-					//txtArea.getDocument().insertString(txtArea.get);
+					 try {
+						int start =txtArea.getLineOfOffset(txtArea.getSelectionStart());
+						int end =txtArea.getLineOfOffset(txtArea.getSelectionEnd());
+						//for(int i=txtArea.getLineStartOffset(start);i<=txtArea.getLineStartOffset(end));i++)
+						//{
+							//get
+						//}
+					} catch (BadLocationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

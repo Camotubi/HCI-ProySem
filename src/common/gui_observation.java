@@ -1,5 +1,4 @@
-package gui;
-import cli.Observation;
+package common;
 
 public class gui_observation extends Observation{
 
@@ -18,6 +17,7 @@ public class gui_observation extends Observation{
 
 	public void incrementClicks() {
 		setNclick(getNclick() + 1);
+		print();
 		
 	}
 
@@ -25,11 +25,20 @@ public class gui_observation extends Observation{
 
 	public int getNclick() {
 		return nclick;
+		
 	}
 
 
 
 	public void setNclick(int nclick) {
 		this.nclick = nclick;
+		print();
+	}
+	
+	@Override
+	public void print()
+	{
+		super.print();
+		System.out.println("nclick:" +nclick);
 	}
 }

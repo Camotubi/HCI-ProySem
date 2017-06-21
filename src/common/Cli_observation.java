@@ -1,4 +1,5 @@
-package cli;
+package common;
+
 public class Cli_observation extends Observation {
 
 
@@ -15,27 +16,32 @@ public class Cli_observation extends Observation {
 	public void print(){
 		super.print();
 		System.out.println(
-				nInsertMode+"\n"+
-						nVisualMode+"\n"+
-						nVisualLineMode+"\n"+
-						nMainMode
+				"nInsertMode:"+nInsertMode+"\n"+
+						"nVisualMode:"+nVisualMode+"\n"+
+						"nVisualLineMode:"+nVisualLineMode+"\n"+
+						"nMainMode:"+nMainMode
 				);
 	}
 	
 	public void incrementNInsertMode()
 	{
+		print();
 		nInsertMode++;
 	}
 	public void incrementNMainMode()
+	
 	{
+		print();
 		nMainMode++;
 	}
 	public void incrementNVisualLineMode()
 	{
+		print();
 		nVisualLineMode++;
 	}
 	public void incrementNVisualMode()
 	{
+		print();
 		nVisualMode++;
 	}
 

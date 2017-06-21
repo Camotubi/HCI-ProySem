@@ -19,7 +19,8 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.Highlight;
 
-import gui.gui_observation;
+import common.Cli_observation;
+import common.gui_observation;
 
 public class CommandLineUserInterface extends JFrame  {
 	public static final char saveTrigger ='w';

@@ -1,4 +1,4 @@
-package cli;
+package common;
 
 public class Observation {
 	private int id;
@@ -21,16 +21,17 @@ public class Observation {
 	//Methods implementation
 	public void print(){
 	System.out.println(
-			namePersona+"\n"+
-			completionTime+"\n"+
-			nkeystrokes+"\n"+
-			userSatisfaction+"\n"+
-			persivedDificulty+"\n"+
-			nCopy+"\n"+
-			nCut+"\n"+
-			nPaste+"\n"+
-			ncomments+"\n"+
-			ntabs+"\n"
+			"ID:"+id+"\n"+
+			"namePersona:"+namePersona+"\n"+
+			"completionTime:"+completionTime+"\n"+
+			"nkeystrokes:"+nkeystrokes+"\n"+
+			"userSatisfaction:"+userSatisfaction+"\n"+
+			"persivedDificulty:"+persivedDificulty+"\n"+
+			"nCopy:"+nCopy+"\n"+
+			"nCut:"+nCut+"\n"+
+			"nPaste:"+nPaste+"\n"+
+			"ncomments:"+ncomments+"\n"+
+			"ntabs:"+ntabs+"\n"
 			
 			);
 	
@@ -146,22 +147,27 @@ public class Observation {
 	public void incrementNkeystrokes()
 	{
 		nkeystrokes++;
+		print();
 	}
-	public void incremetNCopy()
+	public void incrementNCopy()
 	{
 		nCopy++;
+		print();
 	}
 	public void incrementNPaste()
 	{
 		nPaste++;
+		print();
 	}
 	public void incrementNCut()
 	{
 		nCut++;
+		print();
 	}
 	public void incrementNcomments()
 	{
 		ncomments++;
+		print();
 	}
 
 	public void incrementNtabs()
