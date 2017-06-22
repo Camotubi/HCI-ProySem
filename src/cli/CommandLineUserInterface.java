@@ -220,13 +220,13 @@ public class CommandLineUserInterface extends JFrame  {
 
 				@Override
 				public void insertUpdate(DocumentEvent arg0) {
-					obs.peek().incrementNkeystrokes();
+					//obs.peek().incrementNkeystrokes();
 					
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent arg0) {
-					obs.peek().incrementNkeystrokes();
+					//obs.peek().incrementNkeystrokes();
 					
 				}
 		
