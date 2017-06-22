@@ -467,7 +467,7 @@ public class CommandLineUserInterface extends JFrame  {
 					e1.printStackTrace();
 				}
 				obs.peek().incrementNNewLine();
-				obs.peek().incrementNkeystrokes();
+				//obs.peek().incrementNkeystrokes();
 			}
 			
 
@@ -488,7 +488,7 @@ public class CommandLineUserInterface extends JFrame  {
 			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
 				obs.peek().incrementNtabs();
-				obs.peek().incrementNkeystrokes();
+				//obs.peek().incrementNkeystrokes();
 				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
 				if(higlights.length<=0)
 				{
@@ -552,7 +552,7 @@ public class CommandLineUserInterface extends JFrame  {
 					}
 				}
 				obs.peek().incrementNCut();
-				obs.peek().incrementNkeystrokes();
+				//obs.peek().incrementNkeystrokes();
 			}
 		}	
 	}
@@ -563,8 +563,8 @@ public class CommandLineUserInterface extends JFrame  {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			obs.peek().incrementNkeystrokes();
-			obs.peek().incrementNPaste();
+			//obs.peek().incrementNkeystrokes();
+			
 			if(mode.equals(MODE_MAIN))
 			{
 				try {
@@ -574,7 +574,8 @@ public class CommandLineUserInterface extends JFrame  {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		}
+				obs.peek().incrementNPaste();
+			}
 			
 		}
 	
@@ -588,10 +589,11 @@ public class CommandLineUserInterface extends JFrame  {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			obs.peek().incrementNkeystrokes();
-			obs.peek().incrementNCopy();
+			//obs.peek().incrementNkeystrokes();
+			
 			if(mode.equals(MODE_MAIN)||mode.equals(MODE_VISUAL)||mode.equals(MODE_VISUAL_LINE))
 			{
+				obs.peek().incrementNCopy();
 				Highlight higlights[] = getTextArea().getHighlighter().getHighlights();
 				if(higlights.length>0)
 				{
