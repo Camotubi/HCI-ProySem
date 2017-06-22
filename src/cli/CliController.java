@@ -44,6 +44,10 @@ public class CliController
 		
 		public void actionPerformed(ActionEvent e)
 		{
+			
+				
+				System.out.println("HEYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+			
 			if(cliModel.changeMode(view.getModeToChange()))
 			{
 				

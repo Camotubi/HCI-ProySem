@@ -177,7 +177,7 @@ public class CommandLineUserInterface extends JFrame  {
     	commandTextField.addActionListener(checkCommand);
 	// Key mapping
     mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("ESCAPE"),MODE_MAIN);
-	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("I"),MODE_INSERT);
+	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_I,0,true),MODE_INSERT);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("C"),MODE_COMMAND);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("V"),MODE_VISUAL);
 	mainView.getInputMap(IFW).put(KeyStroke.getKeyStroke("L"),MODE_VISUAL_LINE);
@@ -351,6 +351,7 @@ public class CommandLineUserInterface extends JFrame  {
 			textArea.setEditable(false);
 			break;
 		case MODE_INSERT:
+			
 			commandTextField.setVisible(false);
 			commandPanel.setBackground(Color.yellow);
 			getTextArea().getHighlighter().removeAllHighlights();
@@ -358,6 +359,7 @@ public class CommandLineUserInterface extends JFrame  {
 			textArea.setEditable(true);
 			textArea.requestFocus();
 			textArea.getCaret().setVisible(true);
+			System.out.println("\n\n\n\nINSERT MODEE MAN "+textArea.getText());
 			break;
 		case MODE_VISUAL:
 			commandTextField.setVisible(false);
